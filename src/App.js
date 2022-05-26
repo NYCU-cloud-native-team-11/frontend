@@ -11,16 +11,46 @@ import LineChart from "./components/LineChart";
 
 
 function App() {
+  let tsmcData = [];
+  let asmlData = [];
+  console.log("UserData: ", UserData)
+
+  for (let index = 0; index < UserData.length; index++) {
+    switch (UserData[index].company) {
+      case "TSMC":
+        tsmcData.push(UserData[index]);
+        break;
+      case "ASML":
+        asmlData.push(UserData[index]);
+        break;
+    
+      default:
+        break;
+    }
+  }
+
+  console.log("tsmc: ", tsmcData, ", asml: ", asmlData)
+
+
   const [userData, setUserData] = useState({
-    labels: UserData.map((data) => data.year),
+    labels: [2016, 2017, 2018, 2019, 2020, 2021],
     datasets: [
       {
-        label: "Count",
-        data: UserData.map((data) => data.count),
+        label: "TSMC",
+        data: tsmcData.map((data) => data.count),
         backgroundColor: [
           "rgba(75,192,192,1)",
         ],
         borderColor: "rgba(75,192,192,1)",
+        borderWidth: 2,
+      },
+      {
+        label: "ASML",
+        data: asmlData.map((data) => data.count),
+        backgroundColor: [
+          "red",
+        ],
+        borderColor: "red",
         borderWidth: 2,
       },
     ],
