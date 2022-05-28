@@ -37,6 +37,7 @@ function App() {
     backgroundColor: "rgba(75, 192, 192, 1)",
     borderColor: "rgba(75, 192, 192, 1)"
   };
+  let timeLabels = [];
 
   const [data, setData] = useState(() => {
     const fetchData = async () => {
@@ -62,27 +63,43 @@ function App() {
   if(data){
     let date;
     let formatedDate;
+    data.sort((a, b) => (a.date > b.date) ? 1 : -1);
+
     for (let index = 0; index < data.length; index++) {
-      // we don't need to format the dates
-      // date = new Date(data[index].date);
+      // console.log("data: ", data[index])
+      // we don't have to format the dates, but to sort them by date and add null to other company
+
+      date = new Date(data[index].date);
       // console.log("old date: ", data[index].date)
       // console.log("date: ", Date.parse(date))
-      // formatedDate = moment(Date.parse(date)).format("YYYY-MM-DD")
+      formatedDate = moment(Date.parse(date)).format("YYYY-MM-DD")
       // console.log("formatedDate: ", formatedDate, " type: ", typeof(formatedDate) )
 
-      // data[index].date = formatedDate;
+      data[index].date = formatedDate;
       switch (data[index].company) {
         case "TSMC":
-          tsmcData.data.push(data[index].count);
+          tsmcData.data.push( {x:data[index].date, y:data[index].count} );
+          // asmlData.data.push(null);
+          // sumcoData.data.push(null);
+          // amData.data.push(null);
           break;
         case "ASML":
-          asmlData.data.push(data[index].count);
+          // tsmcData.data.push(null);
+          asmlData.data.push({x:data[index].date, y:data[index].count});
+          // sumcoData.data.push(null);
+          // amData.data.push(null);
           break;
         case "SUMCO":
-          sumcoData.data.push(data[index].count);
+          // tsmcData.data.push(null);
+          // asmlData.data.push(null);
+          sumcoData.data.push({x:data[index].date, y:data[index].count});
+          // amData.data.push(null);
           break;
         case "Applied Materials":
-          amData.data.push(data[index].count);
+          // tsmcData.data.push(null);
+          // asmlData.data.push(null);
+          // sumcoData.data.push(null);
+          amData.data.push({x:data[index].date, y:data[index].count});
           break;
         default:
           break;
@@ -94,7 +111,11 @@ function App() {
     // console.log('sumco: ', sumcoData)
     // console.log('applied materials: ', amData)
   }
-  const labels = ['2022-05-20', '2022-05-22', '2022-05-24', '2022-05-26', '2022-05-28', '2022-05-30'];
+  // const labels = ['2022-05-20', '2022-05-21', '2022-05-22', '2022-05-24', '2022-05-26', '2022-05-28', '2022-05-30'];
+    console.log('tsmc: ', tsmcData)
+    console.log('asml: ', asmlData)
+    console.log('sumco: ', sumcoData)
+    console.log('applied materials: ', amData)
 
   return (
       <Box>
@@ -107,7 +128,7 @@ function App() {
         </AppBar>
         <Container maxWidth="md">
           <Box marginTop={3} >
-            <LineChart chartData={ {labels, datasets: [tsmcData, asmlData, sumcoData, amData]} } />
+            <LineChart chartData={ { datasets: [tsmcData, asmlData, sumcoData, amData]} } />
           </Box>
         </Container>
       </Box>
