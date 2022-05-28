@@ -63,20 +63,21 @@ export const UserData = [
   },
 ];
 
-let tsmcData = [];
-let asmlData = [];
-console.log("UserData: ", UserData)
+// let tsmcData = [];
+// let asmlData = [];
+// console.log("UserData: ", UserData)
 
-for (let index = 0; index < UserData.length; index++) {
-  switch (UserData[index].company) {
-    case "TSMC":
-      tsmcData.push(UserData[index]);
-      break;
-    case "ASML":
-      asmlData.push(UserData[index]);
-      break;
+// for (let index = 0; index < UserData.length; index++) {
+//   switch (UserData[index].company) {
+//     case "TSMC":
+//       tsmcData.push(UserData[index]);
+//       break;
+//     case "ASML":
+//       asmlData.push(UserData[index]);
+//       break;
   
-    default:
-      break;
-  }
-}
+//     default:
+//       break;
+//   }
+// }
+
