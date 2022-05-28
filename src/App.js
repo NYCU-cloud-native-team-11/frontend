@@ -63,7 +63,7 @@ function App() {
   if(data){
     let date;
     let formatedDate;
-    data.sort((a, b) => (a.date > b.date) ? 1 : -1);
+    data.sort((a, b) => (a.date > b.date) ? 1 : -1); // sort data by date
 
     for (let index = 0; index < data.length; index++) {
       // console.log("data: ", data[index])
