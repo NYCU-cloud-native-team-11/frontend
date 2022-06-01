@@ -5,130 +5,88 @@ import { Box } from '@mui/system';
 import { AppBar } from '@mui/material'
 import { Toolbar}  from '@mui/material';
 import { Typography } from '@mui/material';
+import { Tab } from '@mui/material';
+import { Tabs } from '@mui/material';
+import { Paper } from '@mui/material';
 // import { UserData } from "./FakeData";
-import LineChart from "./Chart/LineChart";
-import api from './api';
+import LineChart from "./chart/LineChart";
+import TrendData from './TrendData';
+import DatePicker from "react-datepicker";
+import 'react-datepicker/dist/react-datepicker.css'
 import moment from 'moment';
+import FixedRangeLine from './components/FixedRangeLine';
+import CustomizedLine from './components/CustomizedLine';
 
 function App() {
-  // const [chartData, setChartData] = useState({});
-  let amData = {
-    label: "Applied Materials",
-    data: [],
-    backgroundColor: "rgba(255, 165, 0, 1)",
-    borderColor: "rgba(255, 165, 0, 1)"
-  };
-  let asmlData = {
-    label: "ASML",
-    data: [],
-    backgroundColor: "rgba(60, 179, 113, 1)",
-    borderColor: "rgba(60, 179, 113, 1)"
-  };
-  let sumcoData = {
-    label: "SUMCO",
-    data: [],
-    backgroundColor: "rgba(106, 90, 205, 1)",
-    borderColor: "rgba(106, 90, 205, 1)"
-  };
-  let tsmcData = {
-    label: "TSMC",
-    data: [],
-    backgroundColor: "rgba(75, 192, 192, 1)",
-    borderColor: "rgba(75, 192, 192, 1)"
-  };
-  let timeLabels = [];
+  const trend = TrendData()
+  // console.log(trend.tsmcData)
 
-  const [data, setData] = useState(() => {
-    const fetchData = async () => {
-      try {
-        const response = await api.get("/api/trends/")
-        console.log(response.data)
-        setData(response.data.data);
-      } catch (error) {
-        if (error.response){
-          //  not in the 200 response range
-          console.log(error.response.data);
-          console.log(error.response.status);
-          console.log(error.response.headers);
-        } else {
-          console.log(`Error: ${error.message}`);
-        }
-      }
-    }
-
-    fetchData();
-  });
-
-  if(data){
-    let date;
-    let formatedDate;
-    data.sort((a, b) => (a.date > b.date) ? 1 : -1); // sort data by date
-
-    for (let index = 0; index < data.length; index++) {
-      // console.log("data: ", data[index])
-      // we don't have to format the dates, but to sort them by date and add null to other company
-
-      date = new Date(data[index].date);
-      // console.log("old date: ", data[index].date)
-      // console.log("date: ", Date.parse(date))
-      formatedDate = moment(Date.parse(date)).format("YYYY-MM-DD")
-      // console.log("formatedDate: ", formatedDate, " type: ", typeof(formatedDate) )
-
-      data[index].date = formatedDate;
-      switch (data[index].company) {
-        case "TSMC":
-          tsmcData.data.push( {x:data[index].date, y:data[index].count} );
-          // asmlData.data.push(null);
-          // sumcoData.data.push(null);
-          // amData.data.push(null);
-          break;
-        case "ASML":
-          // tsmcData.data.push(null);
-          asmlData.data.push({x:data[index].date, y:data[index].count});
-          // sumcoData.data.push(null);
-          // amData.data.push(null);
-          break;
-        case "SUMCO":
-          // tsmcData.data.push(null);
-          // asmlData.data.push(null);
-          sumcoData.data.push({x:data[index].date, y:data[index].count});
-          // amData.data.push(null);
-          break;
-        case "Applied Materials":
-          // tsmcData.data.push(null);
-          // asmlData.data.push(null);
-          // sumcoData.data.push(null);
-          amData.data.push({x:data[index].date, y:data[index].count});
-          break;
-        default:
-          break;
-      }
-    }
-    // console.log("分類data")
-    // console.log('tsmc: ', tsmcData)
-    // console.log('asml: ', asmlData)
-    // console.log('sumco: ', sumcoData)
-    // console.log('applied materials: ', amData)
+  function TabPanel(props) {
+    const { children, value, index, ...other } = props;
+  
+    return (
+      <div
+        role="tabpanel"
+        hidden={value !== index}
+        id={`chart-switch-tabpanel-${index}`}
+        aria-labelledby={`chart-switch-tab-${index}`}
+        {...other}
+      >
+        {value === index && (
+          <Box sx={{ p: 3 }}>
+            <Typography component={'span'} >{children}</Typography>
+          </Box>
+        )}
+      </div>
+    );
   }
-  // const labels = ['2022-05-20', '2022-05-21', '2022-05-22', '2022-05-24', '2022-05-26', '2022-05-28', '2022-05-30'];
-    console.log('tsmc: ', tsmcData)
-    console.log('asml: ', asmlData)
-    console.log('sumco: ', sumcoData)
-    console.log('applied materials: ', amData)
+
+  function a11yProps(index) {
+    return {
+      id: `chart-switch-${index}`,
+      'aria-controls': `chart-switch-tabpanel-${index}`,
+    };
+  }
+
+  const [tabVal, setTabVal] = useState(0);
+
+  const handleChange = (event, newValue) => {
+    setTabVal(newValue);
+  };
 
   return (
       <Box>
         <AppBar position="static">
           <Toolbar>
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-              NYCU Cloud Native Development
+              NYCU Cloud Native Development Team 11
             </Typography>
           </Toolbar>
         </AppBar>
-        <Container maxWidth="md">
-          <Box marginTop={3} >
-            <LineChart chartData={ { datasets: [tsmcData, asmlData, sumcoData, amData]} } />
+        <Container maxWidth="lg">
+          <Box sx={{ borderBottom: 1, borderColor: 'divider', marginTop: 3 }}>
+            <Tabs value={tabVal} onChange={handleChange} aria-label="Chart Switch" variant='fullWidth'>
+              <Tab label="Today" {...a11yProps(0)} />
+              <Tab label="Last 7 Days" {...a11yProps(1)} />
+              <Tab label="Last 30 Days" {...a11yProps(2)} />
+              <Tab label="Customized Time" {...a11yProps(3)} />
+            </Tabs>
           </Box>
+          <Paper variant='outlined'>
+            <TabPanel value={tabVal} index={0}>
+              Today
+            </TabPanel>
+            <TabPanel value={tabVal} index={1}>
+              <FixedRangeLine props={{trend, fixedRange: 7}} />
+            </TabPanel>
+            <TabPanel value={tabVal} index={2}>
+              <FixedRangeLine props={{trend, fixedRange: 30}} />
+            </TabPanel>
+            <TabPanel value={tabVal} index={3}>
+              <CustomizedLine props={trend} />
+            </TabPanel>
+          </Paper>
+
         </Container>
       </Box>
   );
