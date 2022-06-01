@@ -5,42 +5,9 @@ import moment from 'moment';
 
 function TrendData() {
 
-  // async function fetchData(_url, _setState){
-  //   try {
-  //     const response = await api.get(_url);
-  //     // console.log(response.data);
-  //     // console.log(response.status);
-  //     _setState(response.data)
-  //     return response.data.data
-  //   } catch (error) {
-  //     if (error.response){
-  //       //  not in the 200 response range
-  //       console.log(error.response.data);
-  //       console.log(error.response.status);
-  //       console.log(error.response.headers);
-  //     } else {
-  //       console.log(`Error: ${error.message}`);
-  //     }
-  //     return error.response.data
-  //   }
-  // }
-
-  // const [amData, setAmData]  = useState([]);
-  // const [asmlData, setAsmlData] = useState([]);
-  // const [sumcoData, setSumcoData] = useState([]);
-  // const [tsmcData, setTsmcData] = useState([]);
-
-  // useEffect(()=>{
-  //   fetchData("keywords/Applied Material", setAmData)
-  //   fetchData("keywords/ASML", setAsmlData)
-  //   fetchData("keywords/TSMC", setTsmcData)
-  //   fetchData("keywords/SUMCO", setSumcoData)
-  // }, [])
-
-
   function sortDate(_data){
     let date;
-    let formatDate;
+    // let formatDate;
     _data.sort((a, b) => (a.date > b.date) ? 1 : -1); // sort data by date    
     for (let i = 0; i < _data.length; i++) {
       date = new Date(_data[i].date)
@@ -135,20 +102,20 @@ function TrendData() {
     fetchData();
   });
 
-  const [label, setLabel] = useState(() => {
+  const [dates, setDates] = useState(() => {
     const fetchData = async () => {
       try {
         const response = await api.get("/")
         // console.log(response.data)
-        let dates = [];
+        let times = [];
         let sorted = sortDate(response.data)
         for (let i = 0; i < sorted.length; i++) {
-          dates.push(sorted[i].date)
+          times.push(sorted[i].date)
         }
-        let result = dates.filter(function(element, index, arr){
+        let result = times.filter(function(element, index, arr){
           return arr.indexOf(element) === index;
         });
-        setLabel( result );
+        setDates( result );
       } catch (error) {
         if (error.response){
           //  not in the 200 response range
@@ -168,8 +135,8 @@ function TrendData() {
   // console.log("asml", asmlData)
   // console.log("am", amData)
   // console.log("sumco", sumcoData)
-  // console.log(label)
-  return { tsmcData, asmlData, amData, sumcoData, label }
+  // console.log("dates", dates)
+  return { tsmcData, asmlData, amData, sumcoData, dates }
 }
 
 export default TrendData;

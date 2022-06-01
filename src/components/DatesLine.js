@@ -12,7 +12,7 @@ import DatePicker from "react-datepicker";
 import 'react-datepicker/dist/react-datepicker.css'
 import moment from 'moment';
 
-function App() {
+function DatesLine() {
   const trend = TrendData()
   console.log(trend.tsmcData)
 
@@ -157,4 +157,4 @@ function App() {
   );
 }
 
-export default App;
+export default DatesLine;
