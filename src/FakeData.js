@@ -1,22 +1,19 @@
 export const UserData = [
   {
-    id: 1,
-    year: 2016,
     company: "TSMC",
     count: 823,
+    date: new Date(2022, 22, 2)
 
   },
   {
-    id: 2,
-    year: 2017,
     company: "TSMC",
     count: 345,
+    date: new Date(2022, 24, 2)
   },
   {
-    id: 3,
-    year: 2018,
     company: "TSMC",
     count: 555,
+    date: new Date(2022, 31, 5)
   },
   {
     id: 4,
