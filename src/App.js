@@ -5,117 +5,54 @@ import { Box } from '@mui/system';
 import { AppBar } from '@mui/material'
 import { Toolbar}  from '@mui/material';
 import { Typography } from '@mui/material';
+import { Tab } from '@mui/material';
+import { Tabs } from '@mui/material';
+import { Paper } from '@mui/material';
 // import { UserData } from "./FakeData";
 import LineChart from "./chart/LineChart";
 import TrendData from './TrendData';
 import DatePicker from "react-datepicker";
 import 'react-datepicker/dist/react-datepicker.css'
 import moment from 'moment';
+import FixedRangeLine from './components/FixedRangeLine';
+import CustomizedLine from './components/CustomizedLine';
 
 function App() {
   const trend = TrendData()
-  console.log(trend.tsmcData)
+  // console.log(trend.tsmcData)
 
-  let amLine = {
-    label: "Applied Materials",
-    data: [],
-    backgroundColor: "rgba(255, 165, 0, 1)",
-    borderColor: "rgba(255, 165, 0, 1)"
+  function TabPanel(props) {
+    const { children, value, index, ...other } = props;
+  
+    return (
+      <div
+        role="tabpanel"
+        hidden={value !== index}
+        id={`chart-switch-tabpanel-${index}`}
+        aria-labelledby={`chart-switch-tab-${index}`}
+        {...other}
+      >
+        {value === index && (
+          <Box sx={{ p: 3 }}>
+            <Typography component={'span'} >{children}</Typography>
+          </Box>
+        )}
+      </div>
+    );
+  }
+
+  function a11yProps(index) {
+    return {
+      id: `chart-switch-${index}`,
+      'aria-controls': `chart-switch-tabpanel-${index}`,
+    };
+  }
+
+  const [tabVal, setTabVal] = useState(0);
+
+  const handleChange = (event, newValue) => {
+    setTabVal(newValue);
   };
-  let asmlLine = {
-    label: "ASML",
-    data: [],
-    backgroundColor: "rgba(60, 179, 113, 1)",
-    borderColor: "rgba(60, 179, 113, 1)"
-  };
-  let sumcoLine = {
-    label: "SUMCO",
-    data: [],
-    backgroundColor: "rgba(106, 90, 205, 1)",
-    borderColor: "rgba(106, 90, 205, 1)"
-  };
-  let tsmcLine = {
-    label: "TSMC",
-    data: [],
-    backgroundColor: "rgba(75, 192, 192, 1)",
-    borderColor: "rgba(75, 192, 192, 1)"
-  };
-
-  function setChartData(_trenddata, _line){
-    for (let i = 0; i < _trenddata.length; i++) {
-      // _line.data.push( {x:_trenddata[i].date, y:_trenddata[i].count} )
-      _line.data.push( _trenddata[i].count )
-    }
-  }
-
-  if(trend.tsmcData && trend.amData && trend.asmlData && trend.sumcoData){
-    setChartData(trend.tsmcData, tsmcLine)
-    setChartData(trend.amData, amLine)
-    setChartData(trend.asmlData, asmlLine)
-    setChartData(trend.sumcoData, sumcoLine)
-  }
-
-  const now = new Date()
-  const [label, setLabel] = useState([]);
-  const [startDate, setStartDate] = useState(new Date(now.getFullYear(), now.getMonth(), now.getDate() - 7));
-  const [endDate, setEndDate] = useState(now);
-
-  function filterDate(){
-    const labelTmp = [...trend.dates];
-    console.log(labelTmp)
-
-    if (labelTmp !== []) {
-      console.log("startDate", moment(Date.parse(startDate)).format("YYYY-MM-DD"), " endDate", moment(Date.parse(endDate)).format("YYYY-MM-DD"))
-      // const indexStartDate = dynamicLabel.indexOf( moment(Date.parse(startDate)).format("YYYY-MM-DD") )
-      // const indexEndDate = dynamicLabel.indexOf( moment(Date.parse(endDate)).format("YYYY-MM-DD") )
-      
-      let indexStartDate = 0;
-      let indexEndDate = labelTmp.length-1;
-      // console.log("start: ", typeof(startDate), " labelTmp: ", typeof(labelTmp[1]))
-
-      for (let i = 0; i < labelTmp.length; i++) {
-        if (startDate == labelTmp[i]) {
-          indexStartDate = i;
-          break;
-        } else if (startDate > labelTmp[i]) {
-          indexStartDate = i+1;
-          break;
-        }
-      }
-
-      for (let i = labelTmp.length-1; i >= 0; i--) {
-        if (endDate == labelTmp[i]) {
-          indexEndDate = i;
-          break;
-        } else if (endDate < labelTmp[i]) {
-          indexEndDate = i-1;
-          break;
-        }
-        
-      }
-      console.log("startindex", indexStartDate, " endindex", indexEndDate)
-
-      const dateRange = labelTmp.slice(indexStartDate, indexEndDate)
-      console.log("dateRange", dateRange)
-      setLabel(dateRange)
-    }
-
-      // console.log(dynamicLabel.indexOf("2022-05-02"))
-
-      // const filterDate = dynamicLabel.slice(indexStartDate, indexEndDate+1)
-      // setLabel(filterDate);
-      // console.log("label", label)
-  }
-
-  function handelStartClick(_date){
-    setStartDate(_date)
-    filterDate()
-  }
-
-  function handelEndClick(_date){
-    setEndDate(_date)
-    filterDate()
-  }
 
   return (
       <Box>
@@ -126,32 +63,30 @@ function App() {
             </Typography>
           </Toolbar>
         </AppBar>
-        <Container maxWidth="md">
-          <Box marginTop={3} >
-            <LineChart chartData={ { labels: ['2022-05-20', '2022-05-21', '2022-05-26'], datasets: [tsmcLine, asmlLine, sumcoLine, amLine] } } />
+        <Container maxWidth="lg">
+          <Box sx={{ borderBottom: 1, borderColor: 'divider', marginTop: 3 }}>
+            <Tabs value={tabVal} onChange={handleChange} aria-label="Chart Switch" variant='fullWidth'>
+              <Tab label="Today" {...a11yProps(0)} />
+              <Tab label="Last 7 Days" {...a11yProps(1)} />
+              <Tab label="Last 30 Days" {...a11yProps(2)} />
+              <Tab label="Customized Time" {...a11yProps(3)} />
+            </Tabs>
           </Box>
+          <Paper variant='outlined'>
+            <TabPanel value={tabVal} index={0}>
+              Today
+            </TabPanel>
+            <TabPanel value={tabVal} index={1}>
+              <FixedRangeLine props={{trend, fixedRange: 7}} />
+            </TabPanel>
+            <TabPanel value={tabVal} index={2}>
+              <FixedRangeLine props={{trend, fixedRange: 30}} />
+            </TabPanel>
+            <TabPanel value={tabVal} index={3}>
+              <CustomizedLine props={trend} />
+            </TabPanel>
+          </Paper>
 
-          <Box marginTop={3}>
-            {/* <input type="date" id="startdate" defaultValue={startDate} value={startDate} onChange={(e)=>{handelStartClick(e.target.value)}} />
-            <input type="date" id="enddate" defaultValue={endDate} value={endDate} onChange={(e)=>{handelEndClick(e.target.value)}} /> */}
-            {/* <DatePicker
-              selected={startDate}
-              onChange={(date) => handelStartClick(date)}
-              selectsStart
-              startDate={startDate}
-              endDate={endDate}
-              dateFormat="yyyy-MM-dd"
-            />
-            <DatePicker
-              selected={endDate}
-              onChange={(date) => handelEndClick(date)}
-              selectsEnd
-              startDate={startDate}
-              endDate={endDate}
-              minDate={startDate}
-              dateFormat="yyyy-MM-dd"
-            /> */}
-          </Box>
         </Container>
       </Box>
   );
