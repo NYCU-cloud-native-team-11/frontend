@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import * as React from 'react';
+import './index.css';
 import { Container } from '@mui/material';
 import { Box } from '@mui/system';
 import { AppBar } from '@mui/material'
@@ -19,6 +20,9 @@ function App() {
   const sevenDaysData = SevenDaysData();
   const thirtyDaysData = ThirtyDaysData()
   const last24Data = Last24Data()
+  console.log("7", sevenDaysData.tsmcData[0])
+  console.log("30", thirtyDaysData.tsmcData[0])
+  // console.log("24", last24Data.tsmcData[0])
 
   function TabPanel(props) {
     const { children, value, index, ...other } = props;

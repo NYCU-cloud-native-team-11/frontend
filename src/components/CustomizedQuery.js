@@ -10,8 +10,46 @@ import LineChart from '../chart/LineChart';
 import moment from 'moment';
 import api from '../API/api';
 
-
 function CustomizedQuery() {
+
+  function formateDate(_data){
+    let date;
+    let utcDate;
+
+    for (let i = 0; i < _data.length; i++) {
+      date = new Date(_data[i].date)
+      // console.log("-8前", date)
+      utcDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours() - 8);
+      // console.log("-8後", utcDate)
+    
+      // formatDate = moment(Date.parse(date)).format("YYYY-MM-DD")
+      _data[i].date =  moment(Date.parse(utcDate)).format("YYYY-MM-DD HH:mm:ss");
+    }
+    
+    return _data;
+  }
+  
+  function getNewData(company, dateRange, setState) {
+    const url = "/keywords/"+company+"/"+moment(Date.parse(dateRange[0])).format("YYYYMMDD")+"-"+moment(Date.parse(dateRange[1])).format("YYYYMMDD");
+    // console.log(url)
+    const fetchData = async () => {
+      try {
+        const response = await api.get(url)
+        // console.log("tsmc 7 ", response.data)
+        setState( formateDate(response.data) )
+      } catch (error) {
+        if (error.response) {
+          console.log(error.response.data)
+          console.log(error.response.status)
+          console.log(error.response.headers)
+        } else {
+          console.log(`Error: ${error.message}`)
+        }
+      }
+    }
+
+    fetchData();
+  }
 
   const now = new Date();
   const start = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 3)
@@ -27,34 +65,20 @@ function CustomizedQuery() {
   // console.log(amData)
   // console.log(sumcoData)
 
-  function getNewData(company, dateRange, setState) {
-    const url = "/keywords/"+company+"/"+moment(Date.parse(dateRange[0])).format("YYYYMMDD")+"-"+moment(Date.parse(dateRange[1])).format("YYYYMMDD");
-    // console.log(url)
-    const fetchData = async () => {
-      try {
-        const response = await api.get(url)
-        // console.log("tsmc 7 ", response.data)
-        setState( response.data )
-      } catch (error) {
-        if (error.response) {
-          console.log(error.response.data)
-          console.log(error.response.status)
-          console.log(error.response.headers)
-        } else {
-          console.log(`Error: ${error.message}`)
-        }
-      }
-    }
-
-    fetchData();
-  }
-
   useEffect(() => {
     getNewData("Applied Materials", dateRange, setAmData)
     getNewData("TSMC", dateRange, setTsmcData)
     getNewData("ASML", dateRange, setAsmlData)
     getNewData("SUMCO", dateRange, setSumcoData)
   }, [dateRange])
+
+  const [ config, setConfig ] = useState({
+    data: {
+      datasets: []
+    },
+    options: {}
+  })
+  // console.log("config", config)
 
   useEffect(() => {
     setConfig({
@@ -96,23 +120,16 @@ function CustomizedQuery() {
                 displayFormats: {
                    'hour': 'yyy-MM-DD HH:00'
                 },
+                // zone: "Asia/Taiwan", 
                 parser: function (utcMoment) {
-                  return moment(utcMoment).utcOffset('+0800');
+                  return moment(utcMoment).utcOffset('+0000');
                 }
-              }
+              },
             }
         }
       }
     })
   }, [tsmcData, asmlData, sumcoData, amData])
-
-  const [ config, setConfig ] = useState({
-    data: {
-      datasets: []
-    },
-    options: {}
-  })
-  // console.log("config", config)
   
   return (
     <Box>
