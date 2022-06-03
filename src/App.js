@@ -9,20 +9,16 @@ import { Tab } from '@mui/material';
 import { Tabs } from '@mui/material';
 import { Paper } from '@mui/material';
 // import Helmet from 'react-helmet';
-import TrendData from './API/TrendData';
 import StandardQuery from './components/StandardQuery';
 import CustomizedQuery from './components/CustomizedQuery';
 import SevenDaysData from './API/SevenDaysData';
 import ThirtyDaysData from './API/ThirtyDaysData';
 import Last24Data from './API/Last24Data';
-// import CustomizedData from './API/CustomizedData';
 
 function App() {
   const sevenDaysData = SevenDaysData();
   const thirtyDaysData = ThirtyDaysData()
   const last24Data = Last24Data()
-  // const customizedData = CustomizedData()
-  // console.log("original", sevenDaysData.tsmcData[0])
 
   function TabPanel(props) {
     const { children, value, index, ...other } = props;
