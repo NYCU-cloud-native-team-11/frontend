@@ -17,11 +17,14 @@ import ThirtyDaysData from './API/ThirtyDaysData';
 import Last24Data from './API/Last24Data';
 
 function App() {
+  // console.log("env?", process.env.NODE_ENV)
+  // console.log("URL?", process.env.REACT_APP_BASE_URL)
   const sevenDaysData = SevenDaysData();
   const thirtyDaysData = ThirtyDaysData()
   const last24Data = Last24Data()
-  console.log("7", sevenDaysData.tsmcData[0])
-  console.log("30", thirtyDaysData.tsmcData[0])
+  // console.log("sumco", sevenDaysData.sumcoData)
+  // console.log("asml", sevenDaysData.asmlData)
+  // console.log("tsmc", thirtyDaysData.tsmcData)
   // console.log("24", last24Data.tsmcData[0])
 
   function TabPanel(props) {
