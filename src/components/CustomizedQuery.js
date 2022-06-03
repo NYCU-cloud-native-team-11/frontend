@@ -134,7 +134,7 @@ function CustomizedQuery() {
   return (
     <Box>
       <Container maxWidth="lg">
-        <Grid container direction="row" justifyContent="center" alignItems="center" spacing={{ xs: 2, md: 3 }} marginBottom={5}>
+        <Grid container direction="row" justifyContent="center" alignItems="center" spacing={{ xs: 1, md: 1 }} marginBottom={5}>
         <Grid item>
           <p>選擇要查詢的日期區間，並按下OK</p>
         </Grid>
