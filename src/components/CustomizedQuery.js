@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import * as React from 'react';
 import { Container } from '@mui/material';
+import Grid from '@mui/material/Grid';
 import { Box } from '@mui/system';
 import { DateRangePicker } from 'rsuite';
 import 'rsuite/styles/index.less'; 
@@ -116,8 +117,14 @@ function CustomizedQuery() {
   return (
     <Box>
       <Container maxWidth="lg">
-        <DateRangePicker value={dateRange} onChange={setDateRange} size='lg' />
-        
+        <Grid container direction="row" justifyContent="center" alignItems="center" spacing={{ xs: 2, md: 3 }} marginBottom={5}>
+        <Grid item>
+          <p>選擇要查詢的日期區間，並按下OK</p>
+        </Grid>
+        <Grid item>
+          <DateRangePicker value={dateRange} onChange={setDateRange} size='lg' />
+        </Grid>
+        </Grid>
         <Box marginTop={2} >
           <LineChart props={ config } />
         </Box>
