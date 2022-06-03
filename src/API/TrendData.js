@@ -13,7 +13,7 @@ function TrendData() {
       date = new Date(_data[i].date)
       // console.log("date", date)
       // formatDate = moment(Date.parse(date)).format("YYYY-MM-DD")
-      _data[i].date =  moment(Date.parse(date)).format("YYYY-MM-DD");
+      _data[i].date =  moment(Date.parse(date)).format("YYYY-MM-DD hh:mm:ss");
     }
     
     return _data;
@@ -22,7 +22,7 @@ function TrendData() {
   const [amData, setAmData]  = useState(() => {
     const fetchData = async () => {
       try {
-        const response = await api.get("/keywords/Applied Material") // 加S！
+        const response = await api.get("/keywords/Applied Materials") // 加S！
         // console.log(response.data)
         setAmData( sortDate(response.data) );
       } catch (error) {

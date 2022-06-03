@@ -8,18 +8,21 @@ import { Typography } from '@mui/material';
 import { Tab } from '@mui/material';
 import { Tabs } from '@mui/material';
 import { Paper } from '@mui/material';
-// import { UserData } from "./FakeData";
-import LineChart from "./chart/LineChart";
-import TrendData from './TrendData';
-import DatePicker from "react-datepicker";
-import 'react-datepicker/dist/react-datepicker.css'
-import moment from 'moment';
-import FixedRangeLine from './components/FixedRangeLine';
-import CustomizedLine from './components/CustomizedLine';
+// import Helmet from 'react-helmet';
+import TrendData from './API/TrendData';
+import StandardQuery from './components/StandardQuery';
+import CustomizedQuery from './components/CustomizedQuery';
+import SevenDaysData from './API/SevenDaysData';
+import ThirtyDaysData from './API/ThirtyDaysData';
+import Last24Data from './API/Last24Data';
+// import CustomizedData from './API/CustomizedData';
 
 function App() {
-  const trend = TrendData()
-  // console.log(trend.tsmcData)
+  const sevenDaysData = SevenDaysData();
+  const thirtyDaysData = ThirtyDaysData()
+  const last24Data = Last24Data()
+  // const customizedData = CustomizedData()
+  // console.log("original", sevenDaysData.tsmcData[0])
 
   function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -55,40 +58,43 @@ function App() {
   };
 
   return (
-      <Box>
-        <AppBar position="static">
-          <Toolbar>
-            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-              NYCU Cloud Native Development Team 11
-            </Typography>
-          </Toolbar>
-        </AppBar>
-        <Container maxWidth="lg">
-          <Box sx={{ borderBottom: 1, borderColor: 'divider', marginTop: 3 }}>
-            <Tabs value={tabVal} onChange={handleChange} aria-label="Chart Switch" variant='fullWidth'>
-              <Tab label="Today" {...a11yProps(0)} />
-              <Tab label="Last 7 Days" {...a11yProps(1)} />
-              <Tab label="Last 30 Days" {...a11yProps(2)} />
-              <Tab label="Customized Time" {...a11yProps(3)} />
-            </Tabs>
-          </Box>
-          <Paper variant='outlined'>
-            <TabPanel value={tabVal} index={0}>
-              Today
-            </TabPanel>
-            <TabPanel value={tabVal} index={1}>
-              <FixedRangeLine props={{trend, fixedRange: 7}} />
-            </TabPanel>
-            <TabPanel value={tabVal} index={2}>
-              <FixedRangeLine props={{trend, fixedRange: 30}} />
-            </TabPanel>
-            <TabPanel value={tabVal} index={3}>
-              <CustomizedLine props={trend} />
-            </TabPanel>
-          </Paper>
+    <>
+      {/* <Helmet>
+        <title>Dashboard</title>
+      </Helmet> */}
+      <AppBar position="static">
+        <Toolbar>
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            NYCU Cloud Native Development Team 11
+          </Typography>
+        </Toolbar>
+      </AppBar>
+      <Container maxWidth="lg">
+        <Box sx={{ borderBottom: 1, borderColor: 'divider', marginTop: 3 }}>
+          <Tabs value={tabVal} onChange={handleChange} aria-label="Chart Switch" variant='fullWidth'>
+            <Tab label="Last 24 Hours" {...a11yProps(0)} />
+            <Tab label="Last 7 Days" {...a11yProps(1)} />
+            <Tab label="Last 30 Days" {...a11yProps(2)} />
+            <Tab label="Customized Time" {...a11yProps(3)} />
+          </Tabs>
+        </Box>
+        <Paper variant='outlined'>
+          <TabPanel value={tabVal} index={0}>
+            <StandardQuery props={last24Data} />
+          </TabPanel>
+          <TabPanel value={tabVal} index={1}>
+            <StandardQuery props={sevenDaysData} />
+          </TabPanel>
+          <TabPanel value={tabVal} index={2}>
+            <StandardQuery props={thirtyDaysData} />
+          </TabPanel>
+          <TabPanel value={tabVal} index={3}>
+            <CustomizedQuery />
+          </TabPanel>
+        </Paper>
 
-        </Container>
-      </Box>
+      </Container>
+    </>
   );
 }
 
