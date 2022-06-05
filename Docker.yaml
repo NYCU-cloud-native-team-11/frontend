@@ -1,17 +1,14 @@
-# get the base node image
-FROM node:alpine as builder
-
-# set the working dir for container
-WORKDIR /frontend
-
-# copy the json file first
-COPY ./package.json /frontend
-
-# install npm dependencies
+FROM node:14-alpine AS development
+ENV NODE_ENV development
+# Add a work directory
+WORKDIR /app
+# Cache and Install dependencies
+COPY package.json .
+COPY package-lock.lock .
 RUN npm install
-
-# copy other project files
+# Copy app files
 COPY . .
-
-# build the folder
-CMD [ "npm", "run", "start" ]
+# Expose port
+EXPOSE 3000
+# Start the app
+CMD [ "npm", "start" ]
