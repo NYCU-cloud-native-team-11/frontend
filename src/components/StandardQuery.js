@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { Container } from '@mui/material';
 import { Box } from '@mui/system';
-import LineChart from '../chart/LineChart';
+import LineChart from '../Chart/LineChart';
 import PropTypes from 'prop-types';
 import 'chartjs-adapter-moment';
 import { utc } from 'moment';
