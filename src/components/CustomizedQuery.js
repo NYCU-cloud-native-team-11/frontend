@@ -6,7 +6,7 @@ import { Box } from '@mui/system';
 import { DateRangePicker } from 'rsuite';
 import 'rsuite/styles/index.less'; 
 import 'rsuite/dist/rsuite.min.css'; 
-import LineChart from '../Chart/LineChart';
+import LineChart from './LineChart';
 import moment from 'moment';
 import api from '../API/api';
 
