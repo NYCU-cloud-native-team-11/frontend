@@ -28,28 +28,6 @@ function CustomizedQuery() {
     
     return _data;
   }
-  
-  function getNewData(company, dateRange, setState) {
-    const url = "/keywords/"+company+"/"+moment(Date.parse(dateRange[0])).format("YYYYMMDD")+"-"+moment(Date.parse(dateRange[1])).format("YYYYMMDD");
-    // console.log(url)
-    const fetchData = async () => {
-      try {
-        const response = await api.get(url)
-        // console.log("tsmc 7 ", response.data)
-        setState( formateDate(response.data) )
-      } catch (error) {
-        if (error.response) {
-          console.log(error.response.data)
-          console.log(error.response.status)
-          console.log(error.response.headers)
-        } else {
-          console.log(`Error: ${error.message}`)
-        }
-      }
-    }
-
-    fetchData();
-  }
 
   const now = new Date();
   const start = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 3)
@@ -66,6 +44,28 @@ function CustomizedQuery() {
   // console.log(sumcoData)
 
   useEffect(() => {
+    function getNewData(company, dateRange, setState) {
+      const url = "/keywords/"+company+"/"+moment(Date.parse(dateRange[0])).format("YYYYMMDD")+"-"+moment(Date.parse(dateRange[1])).format("YYYYMMDD");
+      // console.log(url)
+      const fetchData = async () => {
+        try {
+          const response = await api.get(url)
+          // console.log("tsmc 7 ", response.data)
+          setState( formateDate(response.data) )
+        } catch (error) {
+          if (error.response) {
+            console.log(error.response.data)
+            console.log(error.response.status)
+            console.log(error.response.headers)
+          } else {
+            console.log(`Error: ${error.message}`)
+          }
+        }
+      }
+  
+      fetchData();
+    }
+
     getNewData("Applied Materials", dateRange, setAmData)
     getNewData("TSMC", dateRange, setTsmcData)
     getNewData("ASML", dateRange, setAsmlData)
@@ -121,9 +121,9 @@ function CustomizedQuery() {
                    'hour': 'yyy-MM-DD HH:00'
                 },
                 // zone: "Asia/Taiwan", 
-                parser: function (utcMoment) {
-                  return moment(utcMoment).utcOffset('+0000');
-                }
+                // parser: function (utcMoment) {
+                //   return moment(utcMoment).utcOffset('+0000');
+                // }
               },
             }
         }

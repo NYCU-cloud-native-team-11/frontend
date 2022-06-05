@@ -5,7 +5,7 @@ import { Box } from '@mui/system';
 import LineChart from '../chart/LineChart';
 import PropTypes from 'prop-types';
 import 'chartjs-adapter-moment';
-import moment, { utc } from 'moment';
+import { utc } from 'moment';
 
 function StandardQuery({props}) {
   const { tsmcData, asmlData, sumcoData, amData } = props
@@ -59,7 +59,7 @@ function StandardQuery({props}) {
                 displayFormats: {
                    'hour': 'yyy-MM-DD HH:00'
                 },
-                zone: utc, 
+                // zone: utc, 
                 // parser: function (utcMoment) {
                 //   return moment(utcMoment).utcOffset('+0000');
                 // }
