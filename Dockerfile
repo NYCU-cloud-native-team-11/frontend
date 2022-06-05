@@ -4,7 +4,7 @@ ENV NODE_ENV development
 WORKDIR /app
 # Cache and Install dependencies
 COPY package.json ./
-COPY package-lock.lock ./
+COPY package-lock.json ./
 RUN npm install
 # Copy app files
 COPY . ./
