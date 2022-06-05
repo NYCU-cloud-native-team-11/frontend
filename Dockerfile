@@ -5,6 +5,6 @@ WORKDIR /app
 COPY package.json ./
 RUN npm install
 # Copy app files
-COPY . ./
+COPY . .
 # Start the app
 CMD [ "npm", "run", "build" ]
