@@ -12,22 +12,22 @@ import api from '../API/api';
 
 function CustomizedQuery() {
 
-  function fitTimeZone(_data){
-    let date;
-    let localDate;
+  // function fitTimeZone(_data){
+  //   let date;
+  //   let localDate;
 
-    for (let i = 0; i < _data.length; i++) {
-      date = new Date(_data[i].date)
-      // console.log("調整時區前", date)
-      localDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours());
-      // console.log("調整時區後", localDate)
+  //   for (let i = 0; i < _data.length; i++) {
+  //     date = new Date(_data[i].date)
+  //     // console.log("調整時區前", date)
+  //     localDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours());
+  //     // console.log("調整時區後", localDate)
     
-      // formatDate = moment(Date.parse(date)).format("YYYY-MM-DD")
-      _data[i].date =  moment(Date.parse(localDate)).format("YYYY-MM-DD HH:mm:ss");
-    }
+  //     // formatDate = moment(Date.parse(date)).format("YYYY-MM-DD")
+  //     _data[i].date =  moment(Date.parse(localDate)).format("YYYY-MM-DD HH:mm:ss");
+  //   }
     
-    return _data;
-  }
+  //   return _data;
+  // }
     
   //   return _data;
   // }
