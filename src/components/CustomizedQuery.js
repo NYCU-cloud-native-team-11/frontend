@@ -12,19 +12,22 @@ import api from '../API/api';
 
 function CustomizedQuery() {
 
-  // function formateDate(_data){
-  //   let date;
-  //   let utcDate;
+  function fitTimeZone(_data){
+    let date;
+    let localDate;
 
-  //   for (let i = 0; i < _data.length; i++) {
-  //     date = new Date(_data[i].date)
-  //     // console.log("-8前", date)
-  //     utcDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours() - 8);
-  //     // console.log("-8後", utcDate)
+    for (let i = 0; i < _data.length; i++) {
+      date = new Date(_data[i].date)
+      // console.log("調整時區前", date)
+      localDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours());
+      // console.log("調整時區後", localDate)
     
-  //     // formatDate = moment(Date.parse(date)).format("YYYY-MM-DD")
-  //     _data[i].date =  moment(Date.parse(utcDate)).format("YYYY-MM-DD HH:mm:ss");
-  //   }
+      // formatDate = moment(Date.parse(date)).format("YYYY-MM-DD")
+      _data[i].date =  moment(Date.parse(localDate)).format("YYYY-MM-DD HH:mm:ss");
+    }
+    
+    return _data;
+  }
     
   //   return _data;
   // }
@@ -51,7 +54,7 @@ function CustomizedQuery() {
         try {
           const response = await api.get(url)
           // console.log("tsmc 7 ", response.data)
-          // setState( formateDate(response.data) )
+          // setState( fitTimeZone(response.data) )
           setState( response.data )
         } catch (error) {
           if (error.response) {
